@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.depauw.csc480.model.GeneralUser;
 import edu.depauw.csc480.model.Request;
@@ -20,10 +22,12 @@ import edu.depauw.csc480.model.Request;
 public class GeneralUserDAO {
 	private Connection conn;
 	private DatabaseManager dbm;
+	private Map<Integer, GeneralUser> cache;
 
 	public GeneralUserDAO(Connection conn, DatabaseManager dbm) {
 		this.conn = conn;
 		this.dbm = dbm;
+		this.cache = new HashMap<Integer, GeneralUser>();
 	}
 
 	/**
@@ -57,6 +61,8 @@ public class GeneralUserDAO {
 	 * @return the Course object, or null if not found
 	 */
 	public GeneralUser find(int userId) {
+		if (cache.containsKey(userId)) return cache.get(userId);
+		
 		try {
 			String qry = "select * from GeneralUser where userId = ?";
 			PreparedStatement pstmt = conn.prepareStatement(qry);
@@ -112,6 +118,8 @@ public class GeneralUserDAO {
 			double longitude = rs.getDouble("longitude");
 			String venmoId = rs.getString("venmoId");
 			rs.close();
+			
+			if (cache.containsKey(userId)) return cache.get(userId);
 
 			GeneralUser guser = new GeneralUser(this, userId, username, 
 											   password, email, avgRating, 

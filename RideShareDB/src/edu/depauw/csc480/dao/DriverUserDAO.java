@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.depauw.csc480.model.CompletedRequest;
 import edu.depauw.csc480.model.DriverUser;
@@ -17,10 +19,12 @@ public class DriverUserDAO {
 	
 	private Connection conn;
 	private DatabaseManager dbm;
+	private Map<Integer, DriverUser> cache;
 
 	public DriverUserDAO(Connection conn, DatabaseManager dbm) {
 		this.conn = conn;
 		this.dbm = dbm;
+		this.cache = new HashMap<Integer, DriverUser>();
 	}
 
 	/**
@@ -64,6 +68,8 @@ public class DriverUserDAO {
 	 * @return the DriverUser object, or null if not found
 	 */
 	public DriverUser find(int userId) {
+		if (cache.containsKey(userId)) return cache.get(userId);
+		
 		try {
 			String qry = "select * from DriverUser where userId = ?";
 			PreparedStatement pstmt = conn.prepareStatement(qry);

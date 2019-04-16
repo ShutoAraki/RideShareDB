@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.depauw.csc480.model.CompletedRequest;
 import edu.depauw.csc480.model.DriverUser;
@@ -14,10 +16,12 @@ public class CompletedRequestDAO {
 
 	private Connection conn;
 	private DatabaseManager dbm;
+	private Map<Integer, CompletedRequest> cache;
 
 	public CompletedRequestDAO(Connection conn, DatabaseManager dbm) {
 		this.conn = conn;
 		this.dbm = dbm;
+		this.cache = new HashMap<Integer, CompletedRequest>();
 	}
 
 	/**
@@ -67,6 +71,8 @@ public class CompletedRequestDAO {
 	 * @return the Driver object, or null if not found
 	 */
 	public CompletedRequest find(int requestId) {
+		if (cache.containsKey(requestId)) return cache.get(requestId);
+		
 		try {
 			String qry = "select * from CompletedRequest where requestId = ?";
 			PreparedStatement pstmt = conn.prepareStatement(qry);

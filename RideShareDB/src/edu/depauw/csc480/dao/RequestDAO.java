@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 
 import edu.depauw.csc480.model.GeneralUser;
 import edu.depauw.csc480.model.Request;
@@ -13,10 +15,12 @@ public class RequestDAO {
 	
 	private Connection conn;
 	private DatabaseManager dbm;
+	private Map<Integer, Request> cache;
 
 	public RequestDAO(Connection conn, DatabaseManager dbm) {
 		this.conn = conn;
 		this.dbm = dbm;
+		this.cache = new HashMap<Integer, Request>();
 	}
 
 	/**
@@ -67,6 +71,8 @@ public class RequestDAO {
 	 * @return the Request object, or null if not found
 	 */
 	public Request find(int requestId) {
+		if (cache.containsKey(requestId)) return cache.get(requestId);
+		
 		try {
 			String qry = "select * from Request where requestId = ?";
 			PreparedStatement pstmt = conn.prepareStatement(qry);
