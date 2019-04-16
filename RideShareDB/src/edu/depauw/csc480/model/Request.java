@@ -1,23 +1,46 @@
 package edu.depauw.csc480.model;
 
-import edu.depauw.csc480.dao.RequestDAO;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Request {
-	
-	private RequestDAO dao;
+	@Id
 	private int requestId;
+	
+	@ManyToOne
 	private GeneralUser rider;
+	
+	@Basic
 	private String requestTime;
+	
+	@Basic
 	private double fromLat;
+	
+	@Basic
 	private double fromLon;
+	
+	@Basic
 	private double toLat;
+	
+	@Basic
 	private double toLon;
+	
+	@Basic
 	private double price;
+	
+	@Basic
 	private int groupSize;
 	
-	public Request(RequestDAO dao, int requestId, GeneralUser rider, String requestTime, double fromLat, double fromLon,
+	public Request() {}
+	
+	public Request(int requestId, GeneralUser rider, String requestTime, double fromLat, double fromLon,
 			double toLat, double toLon, double price, int groupSize) {
-		this.dao = dao;
 		this.requestId = requestId;
 		this.rider = rider;
 		this.requestTime = requestTime;
@@ -52,7 +75,6 @@ public class Request {
 
 	public void setRequestTime(String requestTime) {
 		this.requestTime = requestTime;
-		dao.changeRequestTime(requestId, requestTime);
 	}
 
 	public double getFromLat() {
@@ -61,7 +83,6 @@ public class Request {
 
 	public void setFromLat(double fromLat) {
 		this.fromLat = fromLat;
-		dao.changeFromLat(requestId, fromLat);
 	}
 
 	public double getFromLon() {
@@ -70,7 +91,6 @@ public class Request {
 
 	public void setFromLon(double fromLon) {
 		this.fromLon = fromLon;
-		dao.changeFromLon(requestId, fromLon);
 	}
 
 	public double getToLat() {
@@ -79,7 +99,6 @@ public class Request {
 
 	public void setToLat(double toLat) {
 		this.toLat = toLat;
-		dao.changeToLat(requestId, toLat);
 	}
 
 	public double getToLon() {
@@ -88,7 +107,6 @@ public class Request {
 
 	public void setToLon(double toLon) {
 		this.toLon = toLon;
-		dao.changeToLon(requestId, toLon);
 	}
 
 	public double getPrice() {
@@ -97,7 +115,6 @@ public class Request {
 
 	public void setPrice(double price) {
 		this.price = price;
-		dao.changePrice(requestId, price);
 	}
 
 	public int getGroupSize() {
@@ -106,7 +123,6 @@ public class Request {
 
 	public void setGroupSize(int groupSize) {
 		this.groupSize = groupSize;
-		dao.changeGroupSize(groupSize, groupSize);
 	}
 
 }

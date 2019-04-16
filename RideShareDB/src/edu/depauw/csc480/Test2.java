@@ -2,7 +2,13 @@ package edu.depauw.csc480;
 
 import java.util.Collection;
 
-import edu.depauw.csc480.dao.DatabaseManager;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.RollbackException;
+import javax.persistence.TypedQuery;
+
 import edu.depauw.csc480.model.GeneralUser;
 import edu.depauw.csc480.model.Request;
 
@@ -16,21 +22,33 @@ import edu.depauw.csc480.model.Request;
 public class Test2 {
 
 	public static void main(String[] args) {
-		DatabaseManager dbm = new DatabaseManager();
 		
-		GeneralUser shuto = dbm.findUserByName("arashuto");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("rideshareDB");
+		EntityManager em = emf.createEntityManager();
+
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+
+		String query = "select gu from GeneralUser gu where gu.username='arashuto'";
+		TypedQuery<GeneralUser> q = em.createQuery(query, GeneralUser.class);
+		GeneralUser shuto = q.getSingleResult();
 		
-		// Now retrieve a table of Shuto's requests
 		Collection<Request> requests = shuto.getRequests();
 		for (Request req : requests) {
 			System.out.println(req);
 		}
 		
-		dbm.commit();
-		
-		dbm.close();
-		
+		try {
+			tx.commit();
+		} catch (RollbackException ex) {
+			ex.printStackTrace();
+			tx.rollback();
+		} finally {
+			em.close();
+		}
+
 		System.out.println("Done");
+		
 	}
 
 }

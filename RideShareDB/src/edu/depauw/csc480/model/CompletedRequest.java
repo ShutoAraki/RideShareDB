@@ -1,22 +1,30 @@
 package edu.depauw.csc480.model;
 
-import edu.depauw.csc480.dao.CompletedRequestDAO;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
-public class CompletedRequest {
+@Entity
+public class CompletedRequest extends Request {
 	
-	private CompletedRequestDAO dao;
-	private Request request;
-	private int requestId;
+	@ManyToOne
 	private DriverUser driver;
+	
+	@Basic
 	private double driverRating;
+	
+	@Basic
 	private double riderRating;
+	
+	@Basic
 	private String completion;
 	
-	public CompletedRequest(CompletedRequestDAO dao, Request request, DriverUser driver, double driverRating,
+	public CompletedRequest() {}
+	
+	public CompletedRequest(int requestId, GeneralUser rider, String requestTime, double fromLat, double fromLon,
+			double toLat, double toLon, double price, int groupSize, DriverUser driver, double driverRating,
 			double riderRating, String completion) {
-		this.dao = dao;
-		this.request = request;
-		requestId = request.getRequestId();
+		super(requestId, rider, requestTime, fromLat, fromLon, toLat, toLon, price, groupSize);
 		this.driver = driver;
 		this.driverRating = driverRating;
 		this.riderRating = riderRating;
@@ -24,7 +32,7 @@ public class CompletedRequest {
 	}
 	
 	public String toString() {
-		String ret = request.toString();
+		String ret = super.toString();
 		ret += "\n\tDriver: " + driver.getDriverName();
 		ret += "\n\tCompleted at " + completion;
 		ret += "\n\tDriver Rating: " + driverRating;
@@ -38,7 +46,6 @@ public class CompletedRequest {
 
 	public void setDriverRating(double driverRating) {
 		this.driverRating = driverRating;
-		dao.changeDriverRating(requestId, driverRating);
 	}
 
 	public double getRiderRating() {
@@ -47,7 +54,6 @@ public class CompletedRequest {
 
 	public void setRiderRating(double riderRating) {
 		this.riderRating = riderRating;
-		dao.changeRiderRating(requestId, riderRating);
 	}
 
 	public String getCompletion() {
@@ -56,7 +62,6 @@ public class CompletedRequest {
 
 	public void setCompletion(String completion) {
 		this.completion = completion;
-		dao.changeCompletion(requestId, completion);
 	}
 	
 }

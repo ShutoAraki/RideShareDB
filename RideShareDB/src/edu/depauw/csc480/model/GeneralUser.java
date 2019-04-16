@@ -2,7 +2,12 @@ package edu.depauw.csc480.model;
 
 import java.util.Collection;
 
-import edu.depauw.csc480.dao.GeneralUserDAO;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 /**
  * GeneralUser table contains information about users (riders and drivers):
@@ -15,21 +20,41 @@ import edu.depauw.csc480.dao.GeneralUserDAO;
  * 	
  * </ul>
  */
-public class GeneralUser {
-	private GeneralUserDAO dao;
-	private int userId;
-	private String username;
-	private String password;
-	private String email;
-	private double avgRating;
-	private double latitude;
-	private double longitude;
-	private String venmoId;
-	private Collection<Request> requests;
 
-	public GeneralUser(GeneralUserDAO dao, int userId, String username, String password,
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
+public class GeneralUser {
+	@Id
+	private int userId;
+	
+	@Basic
+	private String username;
+	
+	@Basic
+	private String password;
+	
+	@Basic
+	private String email;
+	
+	@Basic
+	private double avgRating;
+	
+	@Basic
+	private double latitude;
+	
+	@Basic
+	private double longitude;
+	
+	@Basic
+	private String venmoId;
+	
+	@OneToMany(mappedBy="rider")
+	private Collection<Request> requests;
+	
+	public GeneralUser() {}
+
+	public GeneralUser(int userId, String username, String password,
 					   String email, double avgRating, double latitude, double longitude, String venmoId) {
-		this.dao = dao;
 		this.userId = userId;
 		this.username = username;
 		this.password = password;
@@ -54,7 +79,6 @@ public class GeneralUser {
 
 	public void setUsername(String username) {
 		this.username = username;
-		dao.changeUsername(userId, username);
 	}
 
 	public String getPassword() {
@@ -63,7 +87,6 @@ public class GeneralUser {
 
 	public void setPassword(String password) {
 		this.password = password;
-		dao.changePassword(userId, password);
 	}
 
 	public String getEmail() {
@@ -72,7 +95,6 @@ public class GeneralUser {
 
 	public void setEmail(String email) {
 		this.email = email;
-		dao.changeEmail(userId, email);
 	}
 
 	public double getAvgRating() {
@@ -81,7 +103,6 @@ public class GeneralUser {
 
 	public void setAvgRating(double avgRating) {
 		this.avgRating = avgRating;
-		dao.changeAvgRating(userId, avgRating);
 	}
 
 	public double getLatitude() {
@@ -90,7 +111,6 @@ public class GeneralUser {
 
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
-		dao.changeLatitude(userId, latitude);
 	}
 
 	public double getLongitude() {
@@ -99,7 +119,6 @@ public class GeneralUser {
 
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
-		dao.changeLongitude(userId, longitude);
 	}
 
 	public String getVenmoId() {
@@ -108,11 +127,9 @@ public class GeneralUser {
 
 	public void setVenmoId(String venmoId) {
 		this.venmoId = venmoId;
-		dao.changeVenmoId(userId, venmoId);
 	}
 	
 	public Collection<Request> getRequests() {
-		if (requests == null) requests = dao.getRequests(userId);
 		return requests;
 	}
 }

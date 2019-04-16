@@ -1,33 +1,43 @@
 package edu.depauw.csc480.model;
+
 import java.util.Collection;
 
-import edu.depauw.csc480.dao.DriverUserDAO;
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 
-public class DriverUser {
+@Entity
+public class DriverUser extends GeneralUser {
 	
-	private DriverUserDAO dao;
-	private GeneralUser user;
-	private int userId;
+	@Basic
 	private String licensePlate;
+	
+	@Basic
 	private String birthdate;
+	
+	@Basic
 	private double pricePerMile;
+	
+	@OneToMany(mappedBy="driver")
 	private Collection<CompletedRequest> compRequests;
 	
-	public DriverUser(DriverUserDAO dao, GeneralUser user, String licensePlate, String birthdate, double pricePerMile) {
-		this.dao = dao;
-		this.user = user;
-		userId = user.getUserId();
+	public DriverUser() {}
+	
+	public DriverUser(int userId, String username, String password,
+			   String email, double avgRating, double latitude, double longitude, 
+			   String venmoId, String licensePlate, String birthdate, double pricePerMile) {
+		super(userId, username, password, email, avgRating, latitude, longitude, venmoId);
 		this.licensePlate = licensePlate;
 		this.birthdate = birthdate;
 		this.pricePerMile = pricePerMile;
 	}
 	
 	public String toString() {
-		return user.toString() + "\n\tLicense Plate: " + licensePlate + "\n\tPrice per Mile: " + pricePerMile;
+		return super.toString() + "\n\tLicense Plate: " + licensePlate + "\n\tPrice per Mile: " + pricePerMile;
 	}
 	
 	public String getDriverName() {
-		return user.getUsername();
+		return getUsername();
 	}
 
 	public String getLicensePlate() {
@@ -36,7 +46,6 @@ public class DriverUser {
 
 	public void setLicensePlate(String licensePlate) {
 		this.licensePlate = licensePlate;
-		dao.changeLicensePlate(userId, licensePlate);
 	}
 
 	public String getBirthdate() {
@@ -45,7 +54,6 @@ public class DriverUser {
 
 	public void setBirthdate(String birthdate) {
 		this.birthdate = birthdate;
-		dao.changeBirthdate(userId, birthdate);
 	}
 
 	public double getPricePerMile() {
@@ -54,14 +62,9 @@ public class DriverUser {
 
 	public void setPricePerMile(double pricePerMile) {
 		this.pricePerMile = pricePerMile;
-		dao.changePricePerMile(userId, pricePerMile);
 	}
 	
 	public Collection<CompletedRequest> getCompletedRequests() {
-		if (compRequests == null) {
-			System.out.println("Driver ID: " + userId);
-			compRequests = dao.getCompletedRequests(userId);
-		}
 		return compRequests;
 	}
 	
