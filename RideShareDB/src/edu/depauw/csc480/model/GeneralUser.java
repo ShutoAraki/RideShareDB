@@ -1,5 +1,6 @@
 package edu.depauw.csc480.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Basic;
@@ -37,7 +38,7 @@ public class GeneralUser {
 	private String email;
 	
 	@Basic
-	private double avgRating;
+	protected double avgRating;
 	
 	@Basic
 	private double latitude;
@@ -101,8 +102,22 @@ public class GeneralUser {
 		return avgRating;
 	}
 
-	public void setAvgRating(double avgRating) {
-		this.avgRating = avgRating;
+	public void updateAvgRating(double newRating) {
+		Collection<Double> ratings = new ArrayList<Double>();
+		// Obtain the user's past ratings from his/her past completed requests
+		for (Request req : requests) {
+			if (req instanceof CompletedRequest) {
+				ratings.add(((CompletedRequest) req).getRiderRating());
+			}
+		}
+		ratings.add(newRating);
+		// Calculate the average of the ratings
+		double sum = 0.0;
+		for (double rate : ratings) {
+			sum += rate;
+		}
+		// Finally update the average
+		this.avgRating = sum / ratings.size();
 	}
 
 	public double getLatitude() {
@@ -131,5 +146,10 @@ public class GeneralUser {
 	
 	public Collection<Request> getRequests() {
 		return requests;
+	}
+	
+	public DriverUser becomeDriver(String licensePlate, String birthdate, double pricePerMile) {
+		DriverUser driver = new DriverUser(userId + 100000000, username, password, email, avgRating, latitude, longitude, venmoId, licensePlate, birthdate, pricePerMile);
+		return driver;
 	}
 }

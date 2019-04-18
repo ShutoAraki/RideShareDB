@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Tue Apr 16 00:20:32 EDT 2019:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-016a-245f-ff59-000006f7eb88 
+Thu Apr 18 15:40:26 EDT 2019:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-016a-31f6-eb51-000006f70f80 
 on database directory /Users/shuto/git/RideShareDB/RideShareDB/rideshareDB with class loader sun.misc.Launcher$AppClassLoader@18b4aac2 
 Loaded from file:/Users/shuto/git/RideShareDB/RideShareDB/lib/derby.jar
 java.vendor=Oracle Corporation

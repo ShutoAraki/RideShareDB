@@ -54,7 +54,7 @@ public class Request {
 	
 	public String toString() {
 		String ret = "RequestID: " + requestId;
-		ret += "\n\tRequested by " + getRiderName();
+		ret += "\n\tRider: " + getRiderName();
 		ret += "\n\tPrice: " + price;
 		ret += "\n\tGroup Size: " + groupSize;
 		
@@ -123,6 +123,13 @@ public class Request {
 
 	public void setGroupSize(int groupSize) {
 		this.groupSize = groupSize;
+	}
+	
+	public CompletedRequest completed(DriverUser driver, double driverRating,
+			double riderRating, String completion) {
+		CompletedRequest comp = new CompletedRequest(requestId + 100000000, rider, requestTime, fromLat, fromLon, 
+				toLat, toLon, price, groupSize, driver, driverRating, riderRating, completion);
+		return comp;
 	}
 
 }

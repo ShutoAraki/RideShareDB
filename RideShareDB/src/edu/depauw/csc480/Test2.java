@@ -29,7 +29,8 @@ public class Test2 {
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 
-		String query = "select gu from GeneralUser gu where gu.username='arashuto'";
+		
+		String query = "select gu from GeneralUser gu where gu.username='jon'";
 		TypedQuery<GeneralUser> q = em.createQuery(query, GeneralUser.class);
 		GeneralUser shuto = q.getSingleResult();
 		
@@ -37,6 +38,7 @@ public class Test2 {
 		for (Request req : requests) {
 			System.out.println(req);
 		}
+		
 		
 		try {
 			tx.commit();
@@ -46,6 +48,7 @@ public class Test2 {
 		} finally {
 			em.close();
 		}
+		
 
 		System.out.println("Done");
 		

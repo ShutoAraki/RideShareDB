@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
+
 @Entity
 public class CompletedRequest extends Request {
 	
@@ -29,6 +30,8 @@ public class CompletedRequest extends Request {
 		this.driverRating = driverRating;
 		this.riderRating = riderRating;
 		this.completion = completion;
+		rider.updateAvgRating(riderRating);
+		driver.updateAvgRating(driverRating);
 	}
 	
 	public String toString() {

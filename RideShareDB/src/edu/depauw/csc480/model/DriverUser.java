@@ -1,5 +1,6 @@
 package edu.depauw.csc480.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Basic;
@@ -34,6 +35,25 @@ public class DriverUser extends GeneralUser {
 	
 	public String toString() {
 		return super.toString() + "\n\tLicense Plate: " + licensePlate + "\n\tPrice per Mile: " + pricePerMile;
+	}
+	
+	@Override
+	public void updateAvgRating(double newRating) {
+		Collection<Double> ratings = new ArrayList<Double>();
+		// Obtain the driver's past ratings from his/her past completed requests
+		if (compRequests != null) {
+			for (CompletedRequest compReq : compRequests) {
+				ratings.add(compReq.getDriverRating());
+			}
+		}
+		ratings.add(newRating);
+		// Calculate the average of the ratings
+		double sum = 0.0;
+		for (double rate : ratings) {
+			sum += rate;
+		}
+		// Finally update the average
+		this.avgRating = sum / ratings.size();
 	}
 	
 	public String getDriverName() {
